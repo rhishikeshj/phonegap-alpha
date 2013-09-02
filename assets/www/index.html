@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1,
+        minimum-scale=1, width=device-width, height=device-height"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.min.css" />
+        <title>Hello World</title>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/helpshiftpg.js"></script>
+
+        <script type="text/javascript">
+            document.addEventListener("deviceready", onDeviceReady, false);
+            function onNotificationReceived(count) {
+                var notifyEl = document.getElementById("notification-count");
+                notifyEl.innerText = count;
+            }
+
+            function tokenHandler(result) {
+                HelpshiftPG.registerDeviceToken(result);
+            }
+
+            function errorHandler(error) {
+                alert(error);
+            }
+
+            // handle APNS notifications for iOS
+            function onNotificationAPN(e) {
+                //alert(e);
+                HelpshiftPG.showSupportOnPush(e.issue_id);
+            }
+
+            function onDeviceReady () {
+            HelpshiftPG.init('<platform-id>', '<domain>.helpshift.com','<app-id>');
+            }
+        </script>
+    </head>
+    <body style="width:100%; height:100%;">
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                    <h3>Helpshift PhoneGap</h3>
+            </div>
+        </div>
+        <div class="container">
+            <ul class="unstyled">
+                <li style="padding:5px;">
+                    <button id="notification-count" style="background-color:red;"></button>
+                </li>
+                <li style="padding:5px;">
+                    <label class="checkbox">
+                        <input type="checkbox" id="chat-flag">Enable show chat conversation flag
+                    </label>
+                </li>
+                <li style="padding:5px;">
+                    <label class="checkbox">
+                        <input type="checkbox" id="report-issue-flag">Enable show report issue button in FAQs
+                    </label>
+                </li>
+                <li style="padding:5px;">
+                    <button onclick="HelpshiftPG.showSupport();"  class="btn btn-danger btn-large">Show Support</button>
+                </li>
+                <li style="padding:5px;">
+                    <button onclick="HelpshiftPG.showInbox();" class="btn btn-primary btn-large">Show Inbox</button>
+                </li>
+                <li style="padding:5px;">
+                    <button onclick="HelpshiftPG.reportIssue({'showConvOnReportIssue':document.getElementById('chat-flag').checked ? true : false});" class="btn btn-info btn-large">Report Issue</button>
+                </li>
+                <li style="padding:5px;">
+                    <button onclick="HelpshiftPG.showFAQs({'showConvOnReportIssue':document.getElementById('chat-flag').checked ? true : false, 'showReportIssue':document.getElementById('report-issue-flag').checked ? true : false});" class="btn btn-inverse btn-large">Show FAQs</button>
+                </li>
+                <li style="padding:5px;">
+                    <input type="text" id="faq-section-pub-id" placeholder="Publish ID.."/>
+                    <button onclick="HelpshiftPG.showFAQSection(document.getElementById('faq-section-pub-id').value);" class="btn btn-success btn-large">Show FAQ Section</button>
+                </li>
+                <li style="padding:5px;">
+                    <input type="text" id="faq-pub-id" placeholder="Publish ID.."/>
+                    <button onclick="HelpshiftPG.showFAQ(document.getElementById('faq-pub-id').value);" class="btn btn-warning btn-large">Show FAQ</button>
+                </li>
+            </ul>
+        </div>
+    </body>
+</html>
